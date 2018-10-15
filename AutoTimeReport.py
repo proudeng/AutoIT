@@ -1,7 +1,7 @@
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 
-browser = webdriver.Firefox()
+browser = webdriver.Ie()
 browser.get("https://ep.ss.sw.ericsson.se/irj/portal")
 browser.implicitly_wait(30)
 
@@ -74,3 +74,18 @@ browser.find_element_by_id("aaaaCEAO.LinkBarView.RootUIElementContainer").click(
 browser.find_element_by_id("aaaaKEBH.VcCatRecordEntryView.ButtonNext").click()
 
 browser.find_element_by_id("aaaaLBOD.VcGenericButtonView.Save_com_sap_xss_hr_cat_record_vac_review_VcCatRecordReview").click()
+
+class webhandler():
+    def __init__(self, browser):
+        if browser == "ie":
+            webbrowser = webdriver.Ie()
+        elif browser == "firefox":
+            webbrowser = webdriver.Firefox()
+        webbrowser.implicitly_wait(10)
+    
+    def reportTime(self,eid):
+        
+
+
+if __name__ == '__main__':
+    
