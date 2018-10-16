@@ -84,8 +84,9 @@ class webhandler():
         webbrowser.implicitly_wait(10)
     
     def reportTime(self,eid):
-        
+        fdsa
+
 
 
 if __name__ == '__main__':
-    
+    print("temp print")
