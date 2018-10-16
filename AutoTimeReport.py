@@ -2,12 +2,13 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from mycrypt import prpcrypt
 import json
+from docutils.parsers.rst.directives import encoding
 
 class browserhandler():
     def __init__(self, webbrowser):
         if webbrowser == "ie":
             self.browser = webdriver.Ie()
-        elif browser == "firefox":
+        elif webbrowser == "firefox":
             self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(10)
     
@@ -83,22 +84,24 @@ class browserhandler():
         self.browser.find_element_by_id("aaaaKEBH.VcCatRecordEntryView.ButtonNext").click()
         
         self.browser.find_element_by_id("aaaaLBOD.VcGenericButtonView.Save_com_sap_xss_hr_cat_record_vac_review_VcCatRecordReview").click()
-
+    
+    def __del__(self):
+        self.browser.close()
     
 
 if __name__ == '__main__':
-    browser = browserhandler("ie")
+    browser = browserhandler("firefox")
     pc = prpcrypt("proudengxiaoshee")
     try:
         fb = open("user.json", 'r')
     except FileNotFoundError:
         print("user configuration file not existing!")
+        exit()
     user = json.load(fb)
     for eid in user.keys():
         passwd = user[eid]["passwd"]
         passwd = pc.decrypt(passwd)
-        print(passwd)
-#        browser.reportTime(eid, passwd)
+        browser.reportTime(eid, passwd)
          
         
     

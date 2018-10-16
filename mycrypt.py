@@ -19,10 +19,8 @@ class prpcrypt():
         text = text + ('\0' * add)
         self.ciphertext = cryptor.encrypt(text)
         return str(b2a_hex(self.ciphertext), encoding='utf-8')
-#        return self.ciphertext
 
     def decrypt(self, text):
         cryptor = AES.new(self.key, self.mode, self.key)
-        plain_text = cryptor.decrypt(a2b_hex(text))
-#        plain_text = cryptor.decrypt(text)
+        plain_text = str(cryptor.decrypt(a2b_hex(text)), encoding='utf-8')
         return plain_text.rstrip('\0')
