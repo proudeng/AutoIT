@@ -22,5 +22,5 @@ class prpcrypt():
 
     def decrypt(self, text):
         cryptor = AES.new(self.key, self.mode, self.key)
-        plain_text = str(cryptor.decrypt(a2b_hex(text)), encoding='utf-8')
+        plain_text = str(cryptor.decrypt(a2b_hex(text)), encoding= 'utf-8')
         return plain_text.rstrip('\0')

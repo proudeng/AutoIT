@@ -5,16 +5,21 @@ import json
 from docutils.parsers.rst.directives import encoding
 
 class browserhandler():
-    def __init__(self, webbrowser):
+    def __init__(self, webbrowser, cryptkey):
         if webbrowser == "ie":
             self.browser = webdriver.Ie()
         elif webbrowser == "firefox":
             self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(10)
+        self.pc = prpcrypt(cryptkey)
     
-    def reportTime(self,eid, passwd):
-        self.browser.get("https://ep.ss.sw.ericsson.se/irj/portal")
+    def reportTime(self, eid, passwd):
+        print(passwd)
+        decryptedPasswd = self.pc.decrypt(passwd)
+        eid.encode("utf-8")
+        decryptedPasswd.encode("utf-8")
         
+        self.browser.get("https://ep.ss.sw.ericsson.se/irj/portal")
         try:
             timeReportPage = self.browser.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='Time Sheet Status'])[1]/following::span[2]")
         except NoSuchElementException :
@@ -23,7 +28,7 @@ class browserhandler():
             usr.send_keys(eid)
             passwd = self.browser.find_element_by_id("logonpassfield")
             passwd.clear()
-            passwd.send_keys(passwd)
+            passwd.send_keys(decryptedPasswd)
             self.browser.find_element_by_name("uidPasswordLogon").click()
         
             timeReportPage = self.browser.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='Time Sheet Status'])[1]/following::span[2]")
@@ -90,8 +95,7 @@ class browserhandler():
     
 
 if __name__ == '__main__':
-    browser = browserhandler("firefox")
-    pc = prpcrypt("proudengxiaoshee")
+    browser = browserhandler("ie", "proudengxiaoshee")
     try:
         fb = open("user.json", 'r')
     except FileNotFoundError:
@@ -100,7 +104,6 @@ if __name__ == '__main__':
     user = json.load(fb)
     for eid in user.keys():
         passwd = user[eid]["passwd"]
-        passwd = pc.decrypt(passwd)
         browser.reportTime(eid, passwd)
          
         
