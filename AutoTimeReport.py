@@ -10,16 +10,24 @@ class browserhandler():
             self.browser = webdriver.Ie()
         elif webbrowser == "firefox":
             self.browser = webdriver.Firefox()
+        elif webbrowser == "chrome":
+            self.browser = webdriver.Chrome()
+
         self.browser.implicitly_wait(10)
         self.pc = prpcrypt(cryptkey)
     
     def reportTime(self, eid, passwd):
-        print(passwd)
+        self.browser.get("https://ep.ss.sw.ericsson.se/irj/portal")
+        cookies = self.browser.get_cookies()
+        print(cookies)
+#        cookies = self.browser.get_cookies()
+#        print(cookies)
+
+#        cookies = self.browser.get_cookies()
         decryptedPasswd = self.pc.decrypt(passwd)
         eid.encode("utf-8")
         decryptedPasswd.encode("utf-8")
         
-        self.browser.get("https://ep.ss.sw.ericsson.se/irj/portal")
         try:
             timeReportPage = self.browser.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='Time Sheet Status'])[1]/following::span[2]")
         except NoSuchElementException :
@@ -83,12 +91,19 @@ class browserhandler():
         date7_report.click()
         date7_report.clear()
         date7_report.send_keys(date7_plan.text)
+#        date7_report.submit()
         
         #save reporting 
-        self.browser.find_element_by_id("aaaaCEAO.LinkBarView.RootUIElementContainer").click()
+#        self.browser.find_element_by_id("aaaaCEAO.LinkBarView.RootUIElementContainer").click()
         self.browser.find_element_by_id("aaaaKEBH.VcCatRecordEntryView.ButtonNext").click()
-        
         self.browser.find_element_by_id("aaaaLBOD.VcGenericButtonView.Save_com_sap_xss_hr_cat_record_vac_review_VcCatRecordReview").click()
+        self.browser.switch_to.parent_frame()
+        self.browser.switch_to.parent_frame()
+        self.browser.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='My Support'])[1]/following::span[4]").click()
+#        self.browser.find_element_by_xpath(u"(.//*[normalize-space(text()) and normalize-space(.)='是否确定要注销？'])[1]/following::div[8]").click()
+        self.browser.find_element_by_xpath("//*[@id='button_button_std_yes']/tbody/tr/td[2]/div").click()
+        self.browser.delete_all_cookies()
+        
     
     def __del__(self):
         self.browser.close()
@@ -105,6 +120,5 @@ if __name__ == '__main__':
     for eid in user.keys():
         passwd = user[eid]["passwd"]
         browser.reportTime(eid, passwd)
-         
-        
+    exit()
     
